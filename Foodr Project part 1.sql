@@ -1,30 +1,21 @@
----Revenue by order_id 
-SELECT
-	ORDER_ID,
-	SUM(MEAL_COST * ORDER_QUANTITY) AS REVENUE
-FROM
-	MEALS
-	JOIN ORDERS ON MEALS.MEAL_ID = ORDERS.MEAL_ID
-GROUP BY
-	ORDER_ID
+----Calculating profit by bringing revenue and cost together 
 
----- Calculating cost 
-SELECT meals.meal_id, SUM(meal_cost * stocked_quantity ) AS Total_cost 
-From meals 
-JOIN stock ON meals.meal_id = stock.meal_id  
-GROUP BY meals.meal_id
-ORDER BY Total_cost DESC 
-LIMIT 3
-
------
-WITH cost_and_quantities AS 
-( SELECT meals.meal_id, SUM(stocked_quantity) AS Quantity, 
-SUM(meal_cost * stocked_quantity) AS total_cost 
+With Revenue AS 
+( SELECT meals.meal_id, 
+SUM(meal_price * order_quantity) AS revenue 
+FROM meals 
+JOIN orders
+ON meals.meal_id = orders.meal_id 
+Group BY meals.meal_id 
+),
+Costing AS 
+(SELECT meals.meal_id, 
+SUM ( meal_cost* stocked_quantity) AS cost_ 
 FROM meals 
 JOIN stock ON meals.meal_id = stock.meal_id 
-GROUP BY meals.meal_id )
-
-SELECT meal_id, Quantity, total_cost 
-FROM cost_and_quantities 
-ORDER BY total_cost DESC
+Group BY meals.meal_id )
+SELECT Revenue.meal_id , Revenue, Costing , revenue - cost_ AS profit 
+FROM Revenue 
+JOIN Costing ON Revenue.meal_id = Costing.meal_id 
+ORDER BY profit DESC
 LIMIT 3
