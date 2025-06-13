@@ -8,14 +8,14 @@ JOIN orders
 ON meals.meal_id = orders.meal_id 
 Group BY meals.meal_id 
 ),
-Costing AS 
+Cost AS 
 (SELECT meals.meal_id, 
 SUM ( meal_cost* stocked_quantity) AS cost_ 
 FROM meals 
 JOIN stock ON meals.meal_id = stock.meal_id 
 Group BY meals.meal_id )
-SELECT Revenue.meal_id , Revenue, Costing , revenue - cost_ AS profit 
+SELECT Revenue.meal_id , Revenue, Cost , revenue - cost_ AS profit 
 FROM Revenue 
-JOIN Costing ON Revenue.meal_id = Costing.meal_id 
+JOIN Cost ON Revenue.meal_id = Cost.meal_id 
 ORDER BY profit DESC
 LIMIT 3
