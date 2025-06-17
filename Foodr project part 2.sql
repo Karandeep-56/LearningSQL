@@ -17,3 +17,29 @@ FROM orders
 GROUP BY foodr_month 
 order by foodr_month 
 LIMIT 3 
+
+----registations running total 
+WITH reg_dates AS 
+(SELECT user_id , MIN(order_date) AS reg_date
+FROM orders 
+GROUP BY user_id 
+), 
+registrations AS (SELECT 
+DATE_TRUNC('month', reg_date) ::DATE AS foodr_month,
+COUNT(DISTINCT user_id) AS regs
+FROM reg_dates 
+GROUP BY foodr_month )
+SELECT foodr_month, 
+regs, SUM(regs) OVER(order by foodr_month ASC) AS reg_rt 
+FROM registrations
+ORDER BY foodr_month ASC
+LIMIT 3;
+
+
+
+
+
+
+
+
+
