@@ -8,4 +8,12 @@ COUNT (DISTINCT user_id) AS regs
 FROM reg_dates
 GROUP BY foodr_month 
 ORDER BY foodr_month ASC 
-LIMIT 3;
+LIMIT 3
+
+---Active user query 
+SELECT DATE_TRUNC ( 'month', order_date) :: DATE AS foodr_month, 
+COUNT(DISTINCT user_id) AS Mau 
+FROM orders 
+GROUP BY foodr_month 
+order by foodr_month 
+LIMIT 3 
