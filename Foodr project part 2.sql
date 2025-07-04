@@ -126,6 +126,19 @@ SELECT ROUND( revenue ::NUMERIC/ GREATEST(users,1),2) AS arpu
 FROM KPIs
 
 
+WITH KPIs AS (
+SELECT DATE_TRUNC('month', order_date)::DATE AS deliver_month, 
+SUM(meal_price* order_quantity) AS revenue ,
+COUNT(DISTINCT user_id) AS users
+FROM meals JOIN orders ON meals.meal_id = orders.meal_id 
+GROUP BY deliver_month
+)  
+SELECT deliver_month , 
+ROUND( revenue:: NUMERIC/ GREATEST(users,1),2) AS ARPM
+FROM KPIs
+ORDER BY deliver_month ASc
+
+
 
 
 
