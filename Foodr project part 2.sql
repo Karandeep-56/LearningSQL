@@ -149,6 +149,19 @@ GROUP BY user_id
 SELECT ROUND(AVG(revenue)::NUMERIC ,2) AS arpu 
 FROM KPIs 
 
+---Orders per user 
+WITH KPIs AS 
+(SELECT user_id,
+ COUNT(DISTINCT order_id) AS orders
+ FROM meals JOIN orders ON meals.meal_id = orders.meal_id 
+ GROUP BY user_id
+ ) 
+ SELECT orders,
+ COUNT(DISTINCT user_id) AS users
+ FROM KPIs 
+ GROUP BY orders
+ order by orders ASC
+
 
 
 
