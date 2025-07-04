@@ -1,3 +1,4 @@
+---Registration Growth
 WITH reg_dates AS ( SELECT user_id, 
 MIN(order_date) as reg_date FROM orders 
 GROUP BY user_id
@@ -33,7 +34,7 @@ SELECT foodr_month,
 regs, SUM(regs) OVER(order by foodr_month ASC) AS reg_rt 
 FROM registrations
 ORDER BY foodr_month ASC
-LIMIT 3;
+LIMIT 3; 
 
 --Lagged mau
 WITH maus AS ( 
