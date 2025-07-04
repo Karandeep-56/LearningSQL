@@ -72,6 +72,30 @@ FROM l_delta
 ORDER BY foodr_month 
 LIMIT 3;
 
+--Growth rate 
+WITH maus AS ( 
+SELECT DATE_TRUNC('month',order_date)::DATE AS foodr_month, 
+COUNT( DISTINCT user_id) AS mau 
+FROM orders 
+GROUP BY foodr_month
+),
+l_mau AS (
+SELECT foodr_month, 
+mau, 
+COALESCE( LAG(mau) OVER (ORDER BY foodr_month),1) AS l_maus
+FROM maus
+ORDER BY foodr_month ASC
+) 
+SELECT foodr_month, 
+mau, 
+ ROUND (
+ (mau- l_maus)::NUMERIC/ 
+  l_maus,2) AS growth 
+  FROM l_mau
+  ORDER BY foodr_month ASC 
+  LIMIT 3
+
+
 
 
 
