@@ -177,4 +177,27 @@ GROUP BY revenue_100
 ORDER BY revenue_100 ASC
 
 
+--meal price bucketing using case  
+SELECT
+ CASE 
+     WHEN meal_price<4 THEN 'low price meal'
+	 WHEN meal_price <6 THEN 'mid price meal'
+	 ELSE 'high price meal'
+	 END AS meal_category ,
+	 COUNT(DISTINCT meal_id) AS users 
+	 FROM meals 
+	 GROUP BY meal_category 
+	 order by meal_category
+
+
+
+
+
+
+
+
+
+
+
+
 
