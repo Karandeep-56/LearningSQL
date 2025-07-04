@@ -125,7 +125,7 @@ JOIN orders ON meals.meal_id = orders.meal_id
 SELECT ROUND( revenue ::NUMERIC/ GREATEST(users,1),2) AS arpu
 FROM KPIs
 
-
+--by month ARPU
 WITH KPIs AS (
 SELECT DATE_TRUNC('month', order_date)::DATE AS deliver_month, 
 SUM(meal_price* order_quantity) AS revenue ,
@@ -137,6 +137,17 @@ SELECT deliver_month ,
 ROUND( revenue:: NUMERIC/ GREATEST(users,1),2) AS ARPM
 FROM KPIs
 ORDER BY deliver_month ASc
+
+
+---Query 2( Average revenue per user)
+WITH KPIs AS (SELECT 
+user_id, 
+SUM(meal_price* order_quantity) AS revenue
+FROM meals JOIN orders ON meals.meal_id = orders.meal_id 
+GROUP BY user_id 
+)
+SELECT ROUND(AVG(revenue)::NUMERIC ,2) AS arpu 
+FROM KPIs 
 
 
 
