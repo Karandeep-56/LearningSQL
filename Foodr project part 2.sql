@@ -114,7 +114,16 @@ GROUP BY previous.foodr_month
 ORDER BY previous.foodr_month ASC
 LIMIT 3;
 
-
+---Average Revenue per user 
+WITH KPIs AS 
+( SELECT 
+SUM (meal_price * order_quantity) AS revenue, 
+COUNT(DISTINCT user_id) AS users 
+FROM meals 
+JOIN orders ON meals.meal_id = orders.meal_id
+)
+SELECT ROUND( revenue ::NUMERIC/ GREATEST(users,1),2) AS arpu
+FROM KPIs
 
 
 
